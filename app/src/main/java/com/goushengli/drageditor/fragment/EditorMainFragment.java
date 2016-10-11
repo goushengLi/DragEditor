@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.goushengli.drageditor.R;
 import com.goushengli.drageditor.adapter.EditorContentRecycleAdapter;
 import com.goushengli.drageditor.base.BaseFragment;
+import com.goushengli.drageditor.helper.ItemTouchHelperCallback;
+import com.goushengli.drageditor.helper.OnStartDragListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,9 @@ import java.util.List;
 /**
  * Created by goushengLi on 2016/10/10.
  */
-public class EditorMainFragment extends BaseFragment {
+public class EditorMainFragment extends BaseFragment implements OnStartDragListener {
+
+    private ItemTouchHelper mItemTouchHelper;
 
     private RecyclerView mRecycleView;
 
@@ -40,9 +45,17 @@ public class EditorMainFragment extends BaseFragment {
         for (int i = 0; i < 100; i++) {
             dataList.add(i + "");
         }
-        EditorContentRecycleAdapter recycleAdapter = new EditorContentRecycleAdapter(getContext(), dataList);
+        EditorContentRecycleAdapter recycleAdapter = new EditorContentRecycleAdapter(getContext(), dataList, this);
         mRecycleView.setAdapter(recycleAdapter);
+
+        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(recycleAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecycleView);
     }
 
 
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+
+    }
 }
