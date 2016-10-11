@@ -14,6 +14,7 @@ import com.goushengli.drageditor.helper.ItemTouchHelperAdapter;
 import com.goushengli.drageditor.helper.OnStartDragListener;
 import com.goushengli.drageditor.holder.EditorContentViewHolder;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -63,7 +64,9 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        return false;
+        Collections.swap(mDataList, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 
     @Override

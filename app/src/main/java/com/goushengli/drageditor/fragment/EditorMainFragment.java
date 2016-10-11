@@ -53,9 +53,8 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
         mItemTouchHelper.attachToRecyclerView(mRecycleView);
     }
 
-
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }

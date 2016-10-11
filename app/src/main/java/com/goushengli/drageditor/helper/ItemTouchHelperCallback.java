@@ -9,6 +9,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
+    public static final float ALPHA_FULL = 1.0f;
+
     private final ItemTouchHelperAdapter mAdapter;
 
     public ItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
@@ -34,6 +36,30 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         }
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
+    }
+
+    @Override
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+            if (viewHolder instanceof ItemTouchHelperViewHolder) {
+                ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
+                itemViewHolder.onItemSelected();
+            }
+        }
+
+        super.onSelectedChanged(viewHolder, actionState);
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+
+        viewHolder.itemView.setAlpha(ALPHA_FULL);
+
+        if (viewHolder instanceof ItemTouchHelperViewHolder) {
+            ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
+            itemViewHolder.onItemClear();
+        }
     }
 
     @Override
