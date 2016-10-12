@@ -10,4 +10,14 @@
         android:id="@+id/main_editor_content_fl"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/editor_item_image_iv"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/kobe" />
+
 </RelativeLayout>

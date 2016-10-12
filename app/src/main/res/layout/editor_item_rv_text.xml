@@ -8,6 +8,8 @@
         android:id="@+id/editor_item_text_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:lineSpacingExtra="3dp"
         android:minHeight="35dp"
         android:padding="5dp"
         android:text="我是第一个内容"

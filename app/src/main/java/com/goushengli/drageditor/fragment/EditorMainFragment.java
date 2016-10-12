@@ -1,5 +1,6 @@
 package com.goushengli.drageditor.fragment;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import com.goushengli.drageditor.R;
 import com.goushengli.drageditor.adapter.EditorContentRecycleAdapter;
 import com.goushengli.drageditor.base.BaseFragment;
+import com.goushengli.drageditor.dao.EditorContent;
 import com.goushengli.drageditor.helper.ItemTouchHelperCallback;
 import com.goushengli.drageditor.helper.OnStartDragListener;
 
@@ -41,10 +43,19 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
 
     @Override
     public void initData() {
-        List<String> dataList = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            dataList.add(i + "");
-        }
+        List<EditorContent> dataList = new ArrayList<>();
+
+        EditorContent textContent = new EditorContent();
+        textContent.setType(EditorContent.TEXT_CONTENT);
+        textContent.setTextContent("我是一个文本,哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
+
+        EditorContent imageContent = new EditorContent();
+        imageContent.setType(EditorContent.IMAGE_CONTENT);
+        imageContent.setImageContent(BitmapFactory.decodeResource(getResources(), R.drawable.kobe));
+
+        dataList.add(textContent);
+        dataList.add(imageContent);
+
         EditorContentRecycleAdapter recycleAdapter = new EditorContentRecycleAdapter(getContext(), dataList, this);
         mRecycleView.setAdapter(recycleAdapter);
 
