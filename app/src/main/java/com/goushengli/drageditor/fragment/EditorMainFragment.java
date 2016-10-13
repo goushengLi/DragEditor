@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -24,6 +25,7 @@ import java.util.List;
  * Created by goushengLi on 2016/10/10.
  */
 public class EditorMainFragment extends BaseFragment implements OnStartDragListener {
+
     //滑动时图片item将会被压缩至该高度
     public static int IMAGE_ITEM_SMALL_SIZE;
 

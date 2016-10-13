@@ -7,13 +7,13 @@ import android.util.Log;
 import com.goushengli.drageditor.util.DensityUtil;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static int screenWidth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d("TAG", "屏幕宽度 = " + DensityUtil.getScreenWidthPx(getWindowManager()));
+        screenWidth = DensityUtil.getScreenWidthPx(getWindowManager());
         //初始化图片内容Fragment
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        fragmentManager
