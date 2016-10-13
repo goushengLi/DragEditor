@@ -1,4 +1,4 @@
-package com.goushengli.drageditor.widget;
+package com.goushengli.drageditor.fragment;
 
 /**
  * Created by goushengLi on 2016/10/10.

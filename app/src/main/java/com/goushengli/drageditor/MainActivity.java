@@ -15,11 +15,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //初始化图片内容Fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager
-                .beginTransaction()
-                .add(R.id.main_editor_content_fl, EditorMainFragment.newInstance())
-                .commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager
+//                .beginTransaction()
+//                .add(R.id.main_editor_content_fl, EditorMainFragment.newInstance())
+//                .commit();
 
     }
 }
