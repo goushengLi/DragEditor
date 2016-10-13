@@ -1,11 +1,10 @@
 package com.goushengli.drageditor;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.FrameLayout;
+import android.util.Log;
 
-import com.goushengli.drageditor.fragment.EditorMainFragment;
+import com.goushengli.drageditor.util.DensityUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("TAG", "屏幕宽度 = " + DensityUtil.getScreenWidthPx(getWindowManager()));
         //初始化图片内容Fragment
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        fragmentManager
