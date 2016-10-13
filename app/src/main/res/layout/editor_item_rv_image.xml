@@ -10,6 +10,7 @@
         <RelativeLayout
             android:id="@+id/editor_item_content_rl"
             android:layout_width="285dp"
+            android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:background="@android:color/white">
@@ -22,6 +23,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:adjustViewBounds="true"
+                android:src="@drawable/kobe"
                 android:minHeight="45dp"
                 android:scaleType="centerCrop" />
 

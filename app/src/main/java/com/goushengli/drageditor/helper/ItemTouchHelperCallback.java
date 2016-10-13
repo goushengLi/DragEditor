@@ -36,9 +36,9 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        if (viewHolder.getItemViewType() != target.getItemViewType()) {
-            return false;
-        }
+//        if (viewHolder.getItemViewType() != target.getItemViewType()) {
+//            return false;
+//        }
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
@@ -63,7 +63,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
         if (viewHolder instanceof ItemTouchHelperViewHolder) {
             ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
-            itemViewHolder.onItemClear();
+            itemViewHolder.onItemRelease();
         }
     }
 

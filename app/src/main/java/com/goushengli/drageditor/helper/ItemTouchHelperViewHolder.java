@@ -8,5 +8,5 @@ public interface ItemTouchHelperViewHolder {
 
     void onItemSelected();
 
-    void onItemClear();
+    void onItemRelease();
 }

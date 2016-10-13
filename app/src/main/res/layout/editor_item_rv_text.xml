@@ -9,11 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:lineSpacingExtra="3dp"
+        android:lineSpacingExtra="5dp"
         android:minHeight="35dp"
-        android:padding="5dp"
+        android:padding="8dp"
         android:text="我是第一个内容"
         android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textSize="18sp" />
 
 </RelativeLayout>

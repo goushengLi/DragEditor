@@ -15,6 +15,7 @@ import com.goushengli.drageditor.base.BaseFragment;
 import com.goushengli.drageditor.dao.EditorContent;
 import com.goushengli.drageditor.helper.ItemTouchHelperCallback;
 import com.goushengli.drageditor.helper.OnStartDragListener;
+import com.goushengli.drageditor.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.List;
  * Created by goushengLi on 2016/10/10.
  */
 public class EditorMainFragment extends BaseFragment implements OnStartDragListener {
+    //滑动时图片item将会被压缩至该高度
+    public static int IMAGE_ITEM_SMALL_SIZE;
 
     private ItemTouchHelper mItemTouchHelper;
 
@@ -36,6 +39,7 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
     @Override
     public View createView(LayoutInflater inflater, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.editor_fm_content, null);
+        IMAGE_ITEM_SMALL_SIZE = DensityUtil.dip2px(getContext(), 45);
         mRecycleView = (RecyclerView) view.findViewById(R.id.editor_fm_content_recycleview);
         mRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;
@@ -47,14 +51,18 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
 
         EditorContent textContent = new EditorContent();
         textContent.setType(EditorContent.TEXT_CONTENT);
-        textContent.setTextContent("我是一个文本,哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
+        textContent.setTextContent("我是一个文本,哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
 
         EditorContent imageContent = new EditorContent();
         imageContent.setType(EditorContent.IMAGE_CONTENT);
         imageContent.setImageContent(BitmapFactory.decodeResource(getResources(), R.drawable.kobe));
 
-        dataList.add(textContent);
+//        EditorContent imageContent2 = new EditorContent();
+//        imageContent2.setType(EditorContent.IMAGE_CONTENT);
+//        imageContent2.setImageContent(BitmapFactory.decodeResource(getResources(), R.drawable.kobe));
+
         dataList.add(imageContent);
+        dataList.add(textContent);
 
         EditorContentRecycleAdapter recycleAdapter = new EditorContentRecycleAdapter(getContext(), dataList, this);
         mRecycleView.setAdapter(recycleAdapter);
