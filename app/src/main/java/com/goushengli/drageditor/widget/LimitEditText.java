@@ -36,6 +36,7 @@ public class LimitEditText extends EditText {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
@@ -46,6 +47,8 @@ public class LimitEditText extends EditText {
                 //如何判断什么时候需要加入换行符
                 int remainder = textLength % textRectWidth;
                 Log.d("TAG", "remainder = " + remainder);
+                
+
 
             }
 
