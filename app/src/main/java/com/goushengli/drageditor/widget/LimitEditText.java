@@ -28,7 +28,6 @@ public class LimitEditText extends EditText {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d("TAG", "what the fuck");
     }
 
     public LimitEditText(Context context, AttributeSet attrs) {

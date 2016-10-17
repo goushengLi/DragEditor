@@ -11,15 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.goushengli.drageditor.widget.LimitEditText
-        android:cursorVisible="false"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@null"
-        android:lineSpacingExtra="5dp"
-        android:minHeight="35dp"
-        android:padding="8dp"
-        android:textSize="18sp" />
+    <com.goushengli.drageditor.widget.SplitEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--<com.goushengli.drageditor.widget.LimitEditText-->
+    <!--android:cursorVisible="false"-->
+    <!--android:layout_width="330dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:background="@null"-->
+    <!--android:lineSpacingExtra="5dp"-->
+    <!--android:minHeight="35dp"-->
+    <!--android:padding="8dp"-->
+    <!--android:textSize="18sp" />-->
 
 </RelativeLayout>
