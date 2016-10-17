@@ -12,6 +12,7 @@
         android:layout_height="match_parent" />
 
     <com.goushengli.drageditor.widget.LimitEditText
+        android:cursorVisible="false"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

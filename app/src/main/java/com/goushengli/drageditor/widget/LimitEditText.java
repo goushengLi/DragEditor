@@ -1,6 +1,7 @@
 package com.goushengli.drageditor.widget;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +25,12 @@ import static android.view.KeyEvent.KEYCODE_DEL;
 
 public class LimitEditText extends EditText {
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Log.d("TAG", "what the fuck");
+    }
+
     public LimitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         final int padding = getPaddingLeft();
@@ -46,7 +53,6 @@ public class LimitEditText extends EditText {
                 //如何判断什么时候需要加入换行符
                 int remainder = textLength % textRectWidth;
                 Log.d("TAG", "remainder = " + remainder);
-
             }
 
         });
