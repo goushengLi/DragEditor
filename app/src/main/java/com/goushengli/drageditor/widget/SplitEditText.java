@@ -22,9 +22,9 @@ public class SplitEditText extends EditText {
 
     private Paint mPaint;
 
-    private StringBuilder mLineContentBulider;
+    private StringBuilder mLineContentBuilder;
 
-    private int mTextHeight, mViewWidth, mPaddingLeft, mPaddingRight, mContentWidth;
+    private int mTextHeight, mViewWidth, mPaddingLeft, mPaddingRight, mContentWidth, tempLineWidth, tempLineCount;
 
     private List<LinePar> mLineParList;
 
@@ -33,14 +33,17 @@ public class SplitEditText extends EditText {
         setCursorVisible(false);
         mContext = context;
         mPaint = getPaint();
-        mLineContentBulider = new StringBuilder();
+        mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
+        tempLineWidth = 0;
+        tempLineCount = 0;
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
         mViewWidth = getWidth();
+        mTextHeight = (int) getTextSize();
         mPaddingLeft = getPaddingLeft();
         mPaddingRight = getPaddingRight();
         mContentWidth = mViewWidth - (mPaddingLeft + mPaddingRight);
@@ -49,8 +52,6 @@ public class SplitEditText extends EditText {
     @Override
     protected void onDraw(Canvas canvas) {
         String inputStr = getText().toString().trim();
-        int tempLineWidth = 0;
-        int tempLineCount = 0;
 
         for (int i = 0; i < inputStr.length(); i++) {
             String character = String.valueOf(inputStr.charAt(i));
@@ -58,15 +59,18 @@ public class SplitEditText extends EditText {
             tempLineWidth += characterWidth;
             if (tempLineWidth > mContentWidth) {
                 tempLineCount++;
-                String lineContent = mLineContentBulider.toString();
+                String lineContent = mLineContentBuilder.toString();
 
-                mLineContentBulider.delete(0, mLineContentBulider.length());
+                mLineContentBuilder.delete(0, mLineContentBuilder.length());
                 tempLineWidth = 0;
 
                 addLineParToList(lineContent, tempLineCount, mLineParList);
-                mLineContentBulider.append(character);
+
+                mLineContentBuilder.append(character);
+
             } else {
-                mLineContentBulider.append(character);
+                mLineContentBuilder.append(character);
+                addLineParToList(mLineContentBuilder.toString(), tempLineCount, mLineParList);
             }
 
         }
@@ -76,19 +80,31 @@ public class SplitEditText extends EditText {
     }
 
     private void drawText(List<LinePar> mLineParList, Canvas canvas) {
-        Log.d("TAG", "mLineParList " + mLineParList);
         for (int i = 0; i < mLineParList.size(); i++) {
-            canvas.drawText(mLineParList.get(i).getLineContent(), mPaddingLeft * 1f, 0, mPaint);
+            LinePar child = mLineParList.get(i);
+            canvas.drawText(child.getLineContent(), mPaddingLeft * 1f, mTextHeight * (child.getLineCount()), mPaint);
         }
 
     }
 
 
     private void addLineParToList(String lineContent, int lineCount, List<LinePar> lineParList) {
-        LinePar child = new LinePar();
-        child.setLineContent(lineContent);
-        child.setLineCount(lineCount);
-        lineParList.add(child);
+        try {
+            if (lineParList.get(lineParList.size()).isFinishLine()) {
+                LinePar child = new LinePar();
+                child.setLineContent(lineContent);
+                child.setLineCount(lineCount);
+                lineParList.add(child);
+            } else {
+                lineParList.get(lineParList.size()).setLineContent(lineContent);
+            }
+        } catch (Exception e) {
+            LinePar child = new LinePar();
+            child.setLineContent(lineContent);
+            child.setLineCount(lineCount);
+            lineParList.add(child);
+        }
+
     }
 
     public int getWidthOfString(String str, Paint paint) {

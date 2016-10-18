@@ -7,6 +7,15 @@ package com.goushengli.drageditor.dao;
 public class LinePar {
     String lineContent;
     int lineCount;
+    boolean finishLine;
+
+    public boolean isFinishLine() {
+        return finishLine;
+    }
+
+    public void setFinishLine(boolean finishLine) {
+        this.finishLine = finishLine;
+    }
 
     public String getLineContent() {
         return lineContent;
@@ -22,5 +31,13 @@ public class LinePar {
 
     public void setLineCount(int lineCount) {
         this.lineCount = lineCount;
+    }
+
+    @Override
+    public String toString() {
+        return "LinePar{" +
+                "lineContent='" + lineContent + '\'' +
+                ", lineCount=" + lineCount +
+                '}';
     }
 }

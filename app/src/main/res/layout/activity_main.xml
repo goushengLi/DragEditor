@@ -12,7 +12,8 @@
         android:layout_height="match_parent" />
 
     <com.goushengli.drageditor.widget.SplitEditText
-        android:cursorVisible="false"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:cursorVisible="false"
+        android:textSize="18sp" />
 </RelativeLayout>
