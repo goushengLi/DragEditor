@@ -6,72 +6,109 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import com.goushengli.drageditor.dao.LinePar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by goushengLi on 2016/10/17.
+ * Created by Administrator on 2016/10/18 0018.
  */
 
 public class SplitEditText extends EditText {
+
     private Context mContext;
 
-    private int mViewWidth, mTextHeight, mPaddingLeft, mPaddingRight, mContentWidth;
-
     private Paint mPaint;
+
+    private StringBuilder mLineContentBuilder;
+
+    private int mTextHeight, mViewWidth, mPaddingLeft, mPaddingRight, mContentWidth, tempLineWidth, tempLineCount;
+
+    private List<LinePar> mLineParList;
 
     public SplitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         setCursorVisible(false);
         mContext = context;
-        //获取View的画笔
         mPaint = getPaint();
+        mLineContentBuilder = new StringBuilder();
+        mLineParList = new ArrayList<>();
+        tempLineWidth = 0;
+        tempLineCount = 0;
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
-        //获得左右内边距
+        mViewWidth = getWidth();
+        mTextHeight = (int) getTextSize();
         mPaddingLeft = getPaddingLeft();
         mPaddingRight = getPaddingRight();
-        //获取EditText的宽度
-        mViewWidth = getWidth();
-        //计算出EditText实际的内容宽度
-        mContentWidth = mViewWidth - mPaddingLeft - mPaddingRight;
+        mContentWidth = mViewWidth - (mPaddingLeft + mPaddingRight);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //获取当前EditText的文字内容(包括目前输入的内容)
         String inputStr = getText().toString().trim();
-        //循环遍历,通过将一个字符的宽度累加起来,没累加一个字符串长度,就判断是否大于当前mTextWidth-(mPaddingLeft+mPaddingRight)
-        //如果大于当前的宽度,则绘制到下一行,并且将之前的文字添加到List中
-        int tempLineWidth = 0;
-        int tempLineCount = 0;
-        for (int chIndex = 0; chIndex < inputStr.length(); chIndex++) {
-            char ch = inputStr.charAt(chIndex);
-            String str = String.valueOf(ch);
-            float strWidth = 0;
-            if (!str.isEmpty())
-                strWidth = getWidthOfString(str, mPaint);
 
-            tempLineWidth += Math.ceil(strWidth);
-            //如果当前的输入的内容累加已经大于一行的宽度了,那么就需要行数加一
-            if (tempLineWidth >= mContentWidth) {
-                tempLineCount = tempLineCount + 1;
+        for (int i = 0; i < inputStr.length(); i++) {
+            String character = String.valueOf(inputStr.charAt(i));
+            float characterWidth = getWidthOfString(character, mPaint);
+            tempLineWidth += characterWidth;
+            if (tempLineWidth > mContentWidth) {
+                tempLineCount++;
+                String lineContent = mLineContentBuilder.toString();
 
+                mLineContentBuilder.delete(0, mLineContentBuilder.length());
+                tempLineWidth = 0;
 
-                continue;
-            }else {
-                continue;
+                addLineParToList(lineContent, tempLineCount, mLineParList);
+
+                mLineContentBuilder.append(character);
+
+            } else {
+                mLineContentBuilder.append(character);
+                addLineParToList(mLineContentBuilder.toString(), tempLineCount, mLineParList);
             }
-
 
         }
 
+        drawText(mLineParList, canvas);
 
     }
 
-    public static int getWidthOfString(String str, Paint paint) {
+    private void drawText(List<LinePar> mLineParList, Canvas canvas) {
+        for (int i = 0; i < mLineParList.size(); i++) {
+            LinePar child = mLineParList.get(i);
+            canvas.drawText(child.getLineContent(), mPaddingLeft * 1f, mTextHeight * (child.getLineCount()), mPaint);
+        }
+
+    }
+
+
+    private void addLineParToList(String lineContent, int lineCount, List<LinePar> lineParList) {
+        try {
+            if (lineParList.get(lineParList.size()).isFinishLine()) {
+                LinePar child = new LinePar();
+                child.setLineContent(lineContent);
+                child.setLineCount(lineCount);
+                lineParList.add(child);
+            } else {
+                lineParList.get(lineParList.size()).setLineContent(lineContent);
+            }
+        } catch (Exception e) {
+            LinePar child = new LinePar();
+            child.setLineContent(lineContent);
+            child.setLineCount(lineCount);
+            lineParList.add(child);
+        }
+
+    }
+
+    public int getWidthOfString(String str, Paint paint) {
+
         if (str != null && !str.equals("") && paint != null) {
             int strLength = str.length();
             int result = 0;

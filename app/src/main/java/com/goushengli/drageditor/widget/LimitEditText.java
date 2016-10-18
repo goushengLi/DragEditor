@@ -53,6 +53,10 @@ public class LimitEditText extends EditText {
                 //如何判断什么时候需要加入换行符
                 int remainder = textLength % textRectWidth;
                 Log.d("TAG", "remainder = " + remainder);
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 
             }
 
