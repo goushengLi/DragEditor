@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.goushengli.drageditor.dao.LinePar;
@@ -13,89 +12,118 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 按行切割EditText
  * Created by Administrator on 2016/10/18 0018.
  */
 
 public class SplitEditText extends EditText {
 
-    private Context mContext;
-
     private Paint mPaint;
 
     private StringBuilder mLineContentBuilder;
 
-    private int mTextHeight, mViewWidth, mPaddingLeft, mPaddingRight, mContentWidth, tempLineWidth, tempLineCount;
+    private int mTextHeight, mPaddingLeft, mContentWidth;
 
     private List<LinePar> mLineParList;
 
     public SplitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setCursorVisible(false);
-        mContext = context;
         mPaint = getPaint();
         mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
-        tempLineWidth = 0;
-        tempLineCount = 0;
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
-        mViewWidth = getWidth();
         mTextHeight = (int) getTextSize();
         mPaddingLeft = getPaddingLeft();
-        mPaddingRight = getPaddingRight();
-        mContentWidth = mViewWidth - (mPaddingLeft + mPaddingRight);
+        mContentWidth = getWidth() - (mPaddingLeft + getPaddingRight());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        mLineParList.clear();
-        String inputStr = getText().toString().trim();
-        mLineContentBuilder.delete(0, mLineContentBuilder.length());
-        tempLineWidth = 0;
-        for (int i = 0; i < inputStr.length(); i++) {
-            String character = String.valueOf(inputStr.charAt(i));
-            float characterWidth = getWidthOfString(character, mPaint);
-            tempLineWidth += characterWidth;
-            if (tempLineWidth > mContentWidth - 10) {
-                tempLineCount++;
-                tempLineWidth = 0;
-                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
-                mLineContentBuilder.delete(0, mLineContentBuilder.length());
-                mLineContentBuilder.append(character);
-                addLineParToList(mLineContentBuilder.toString(), tempLineCount, mLineParList);
-            } else {
-                mLineContentBuilder.append(character);
-                addLineParToList(mLineContentBuilder.toString(), tempLineCount, mLineParList);
-            }
+        String inputContent = getText().toString();
 
-        }
+        int lineWidth = 0;
+        int lineCount = 0;
+
+        initSourceData(mLineParList, mLineContentBuilder);
+
+        splitInputToListByLength(inputContent, lineWidth, lineCount);
 
         drawText(mLineParList, canvas);
 
     }
 
+    private void splitInputToListByLength(String inputContent, int lineWidth, int lineCount) {
+
+        for (int i = 0; i < inputContent.length(); i++) {
+            String character = String.valueOf(inputContent.charAt(i));
+            float characterWidth = getWidthOfString(character, mPaint);
+            lineWidth += characterWidth;
+            if (lineWidth > mContentWidth) {
+                lineCount++;
+                lineWidth = 0;
+                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
+                mLineContentBuilder.delete(0, mLineContentBuilder.length());
+                lineWidth += characterWidth;
+                appendCharToLine(lineCount, character);
+            } else {
+                appendCharToLine(lineCount, character);
+            }
+
+        }
+    }
+
+    private void appendCharToLine(int lineCount, String character) {
+        mLineContentBuilder.append(character);
+        addLineParToList(mLineContentBuilder.toString(), lineCount, mLineParList);
+    }
+
+    private void initSourceData(List<LinePar> linePars, StringBuilder contentBuilder) {
+        linePars.clear();
+        contentBuilder.delete(0, contentBuilder.length());
+    }
+
     private void addLineParToList(String lineContent, int lineCount, List<LinePar> lineParList) {
 
-        try {
-            if (lineParList.get(lineParList.size() - 1).isFinishLine()) {
-                LinePar child = new LinePar();
-                child.setLineContent(lineContent);
-                child.setLineCount(lineCount);
-                lineParList.add(child);
-            } else {
-                LinePar child = lineParList.get(lineParList.size() - 1);
-                child.setLineContent(lineContent);
-            }
-        } catch (Exception e) {
-            LinePar child = new LinePar();
-            child.setLineContent(lineContent);
-            child.setLineCount(lineCount);
-            lineParList.add(child);
+        if (lineParList.size() == 0) {//证明是第一行
+
+            createLinParAndAddToList(lineContent, lineCount, lineParList);
+
+        } else {
+            LinePar linePar = lineParList.get(lineParList.size() - 1);
+            if (linePar.isFinishLine())
+                createLinParAndAddToList(lineContent, lineCount, lineParList);
+            else
+                linePar.setLineContent(lineContent);
         }
 
+//        try {
+//            if (lineParList.get(lineParList.size() - 1).isFinishLine()) {
+//                LinePar child = new LinePar();
+//                child.setLineContent(lineContent);
+//                child.setLineCount(lineCount);
+//                lineParList.add(child);
+//            } else {
+//                LinePar child = lineParList.get(lineParList.size() - 1);
+//                child.setLineContent(lineContent);
+//            }
+//        } catch (Exception e) {
+//            LinePar child = new LinePar();
+//            child.setLineContent(lineContent);
+//            child.setLineCount(lineCount);
+//            lineParList.add(child);
+//        }
+
+    }
+
+    private void createLinParAndAddToList(String lineContent, int lineCount, List<LinePar> lineParList) {
+        LinePar linePar = new LinePar();
+        linePar.setLineContent(lineContent);
+        linePar.setLineCount(lineCount);
+        lineParList.add(linePar);
     }
 
     private void drawText(List<LinePar> mLineParList, Canvas canvas) {
@@ -108,7 +136,6 @@ public class SplitEditText extends EditText {
 
 
     public int getWidthOfString(String str, Paint paint) {
-
         if (str != null && !str.equals("") && paint != null) {
             int strLength = str.length();
             int result = 0;
