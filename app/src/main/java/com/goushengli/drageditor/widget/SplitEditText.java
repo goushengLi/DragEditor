@@ -51,7 +51,7 @@ public class SplitEditText extends EditText {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
+        mLineParList.clear();
         String inputStr = getText().toString().trim();
         mLineContentBuilder.delete(0, mLineContentBuilder.length());
         tempLineWidth = 0;
@@ -59,13 +59,13 @@ public class SplitEditText extends EditText {
             String character = String.valueOf(inputStr.charAt(i));
             float characterWidth = getWidthOfString(character, mPaint);
             tempLineWidth += characterWidth;
-            if (tempLineWidth > mContentWidth) {
+            if (tempLineWidth > mContentWidth - 10) {
                 tempLineCount++;
-                String lineContent = mLineContentBuilder.toString();
                 tempLineWidth = 0;
                 mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
-                addLineParToList(lineContent, tempLineCount, mLineParList);
+                mLineContentBuilder.delete(0, mLineContentBuilder.length());
                 mLineContentBuilder.append(character);
+                addLineParToList(mLineContentBuilder.toString(), tempLineCount, mLineParList);
             } else {
                 mLineContentBuilder.append(character);
                 addLineParToList(mLineContentBuilder.toString(), tempLineCount, mLineParList);
@@ -99,10 +99,8 @@ public class SplitEditText extends EditText {
     }
 
     private void drawText(List<LinePar> mLineParList, Canvas canvas) {
-
         for (int i = 0; i < mLineParList.size(); i++) {
             LinePar child = mLineParList.get(i);
-            Log.d("TAG", "getLineCount = " + child.getLineCount());
             canvas.drawText(child.getLineContent(), mPaddingLeft * 1f, mTextHeight * (child.getLineCount() + 1), mPaint);
         }
 
