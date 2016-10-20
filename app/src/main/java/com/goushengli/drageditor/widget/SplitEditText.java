@@ -88,7 +88,7 @@ public class SplitEditText extends EditText {
 
     private void addLineParToList(String lineContent, int lineCount, List<LinePar> lineParList) {
 
-        if (lineParList.size() == 0) {//证明是第一行
+        if (lineParList.size() == 0) {
 
             createLinParAndAddToList(lineContent, lineCount, lineParList);
 
@@ -99,23 +99,6 @@ public class SplitEditText extends EditText {
             else
                 linePar.setLineContent(lineContent);
         }
-
-//        try {
-//            if (lineParList.get(lineParList.size() - 1).isFinishLine()) {
-//                LinePar child = new LinePar();
-//                child.setLineContent(lineContent);
-//                child.setLineCount(lineCount);
-//                lineParList.add(child);
-//            } else {
-//                LinePar child = lineParList.get(lineParList.size() - 1);
-//                child.setLineContent(lineContent);
-//            }
-//        } catch (Exception e) {
-//            LinePar child = new LinePar();
-//            child.setLineContent(lineContent);
-//            child.setLineCount(lineCount);
-//            lineParList.add(child);
-//        }
 
     }
 
