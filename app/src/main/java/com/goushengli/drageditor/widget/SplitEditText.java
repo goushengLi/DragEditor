@@ -4,12 +4,15 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.goushengli.drageditor.dao.LinePar;
 import com.goushengli.drageditor.util.DensityUtil;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,23 +22,31 @@ import java.util.List;
  */
 
 public class SplitEditText extends EditText {
+    private float LINE_SPACE_INCREASE;
 
     private Paint mPaint;
 
     private StringBuilder mLineContentBuilder;
 
-    private int mTextHeight, mPaddingLeft, mContentWidth, mLineSpace;
+    private int mTextHeight, mPaddingLeft, mPaddingTop, mPaddingBottom, mContentWidth;
 
     private List<LinePar> mLineParList;
+    private float mLineSpace;
+    private float spaceExtra;
 
     public SplitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setTextColor(Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= 16) {
+            spaceExtra = getLineSpacingExtra();
+        }
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setTextSize(getPaint().getTextSize());
-        setTextColor(Color.TRANSPARENT);
-        mLineSpace = DensityUtil.dip2px(context, 5);
         mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
+
+        mLineSpace = spaceExtra;
+        LINE_SPACE_INCREASE = spaceExtra;
     }
 
     @Override
@@ -43,7 +54,8 @@ public class SplitEditText extends EditText {
         super.onWindowFocusChanged(hasWindowFocus);
         mTextHeight = (int) getTextSize();
         mPaddingLeft = getPaddingLeft();
-
+        mPaddingTop = getPaddingTop();
+        mPaddingBottom = getPaddingBottom();
         mContentWidth = getWidth() - (mPaddingLeft + getPaddingRight());
     }
 
@@ -116,9 +128,11 @@ public class SplitEditText extends EditText {
     }
 
     private void drawText(List<LinePar> mLineParList, Canvas canvas) {
+        float lineSpace = mLineSpace;
         for (int i = 0; i < mLineParList.size(); i++) {
             LinePar child = mLineParList.get(i);
-            canvas.drawText(child.getLineContent(), mPaddingLeft * 1f, mTextHeight * (child.getLineCount() + 1), mPaint);
+            canvas.drawText(child.getLineContent(), mPaddingLeft, mTextHeight * (child.getLineCount() + 1) + lineSpace, mPaint);
+            lineSpace += LINE_SPACE_INCREASE * 2;
         }
 
     }

@@ -11,13 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+
     <com.goushengli.drageditor.widget.SplitEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
         android:cursorVisible="true"
+        android:lineSpacingExtra="3dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
+        android:paddingRight="10dp"
+        android:textSize="18sp" />
 
     <!--<com.goushengli.drageditor.widget.LimitEditText-->
     <!--android:cursorVisible="false"-->
