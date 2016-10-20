@@ -2,11 +2,13 @@ package com.goushengli.drageditor.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
 import com.goushengli.drageditor.dao.LinePar;
+import com.goushengli.drageditor.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +24,16 @@ public class SplitEditText extends EditText {
 
     private StringBuilder mLineContentBuilder;
 
-    private int mTextHeight, mPaddingLeft, mContentWidth;
+    private int mTextHeight, mPaddingLeft, mContentWidth, mLineSpace;
 
     private List<LinePar> mLineParList;
 
     public SplitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mPaint = getPaint();
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setTextSize(getPaint().getTextSize());
+        setTextColor(Color.TRANSPARENT);
+        mLineSpace = DensityUtil.dip2px(context, 5);
         mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
     }
@@ -38,13 +43,14 @@ public class SplitEditText extends EditText {
         super.onWindowFocusChanged(hasWindowFocus);
         mTextHeight = (int) getTextSize();
         mPaddingLeft = getPaddingLeft();
+
         mContentWidth = getWidth() - (mPaddingLeft + getPaddingRight());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
         String inputContent = getText().toString();
-
         int lineWidth = 0;
         int lineCount = 0;
 
