@@ -10,9 +10,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.goushengli.drageditor.dao.LinePar;
-import com.goushengli.drageditor.util.DensityUtil;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class SplitEditText extends EditText {
 
     private StringBuilder mLineContentBuilder;
 
-    private int mTextHeight, mPaddingLeft, mPaddingTop, mPaddingBottom, mContentWidth;
+    private int mTextHeight, mPaddingLeft, mContentWidth;
 
     private List<LinePar> mLineParList;
     private float mLineSpace;
@@ -36,11 +34,10 @@ public class SplitEditText extends EditText {
 
     public SplitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setTextColor(Color.TRANSPARENT);
-        if (Build.VERSION.SDK_INT >= 16) {
-            spaceExtra = getLineSpacingExtra();
-        }
+//        setTextColor(Color.TRANSPARENT);
+        spaceExtra = getLineSpacingExtra();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setColor(Color.RED);
         mPaint.setTextSize(getPaint().getTextSize());
         mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
@@ -54,8 +51,6 @@ public class SplitEditText extends EditText {
         super.onWindowFocusChanged(hasWindowFocus);
         mTextHeight = (int) getTextSize();
         mPaddingLeft = getPaddingLeft();
-        mPaddingTop = getPaddingTop();
-        mPaddingBottom = getPaddingBottom();
         mContentWidth = getWidth() - (mPaddingLeft + getPaddingRight());
     }
 
@@ -80,6 +75,14 @@ public class SplitEditText extends EditText {
             String character = String.valueOf(inputContent.charAt(i));
             float characterWidth = getWidthOfString(character, mPaint);
             lineWidth += characterWidth;
+            if (character.equals("\n")) {
+                lineCount++;
+                lineWidth = 0;
+                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
+                mLineContentBuilder.delete(0, mLineContentBuilder.length());
+                lineWidth += characterWidth;
+            }
+
             if (lineWidth > mContentWidth) {
                 lineCount++;
                 lineWidth = 0;
@@ -107,9 +110,7 @@ public class SplitEditText extends EditText {
     private void addLineParToList(String lineContent, int lineCount, List<LinePar> lineParList) {
 
         if (lineParList.size() == 0) {
-
             createLinParAndAddToList(lineContent, lineCount, lineParList);
-
         } else {
             LinePar linePar = lineParList.get(lineParList.size() - 1);
             if (linePar.isFinishLine())
@@ -137,8 +138,7 @@ public class SplitEditText extends EditText {
 
     }
 
-
-    public int getWidthOfString(String str, Paint paint) {
+    private int getWidthOfString(String str, Paint paint) {
         if (str != null && !str.equals("") && paint != null) {
             int strLength = str.length();
             int result = 0;
