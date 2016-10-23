@@ -85,19 +85,10 @@ public class SplitEditText extends EditText {
             String character = String.valueOf(inputContent.charAt(i));
             float characterWidth = getWidthOfString(character, mPaint);
             lineWidth += characterWidth;
-
             if (character.equals("\n")) {
                 lineCount++;
                 lineWidth = 0;
-                if (mLineParList.size() == 0) {
-                    LinePar firstLinPar = new LinePar();
-                    firstLinPar.setFinishLine(true);
-                    firstLinPar.setLineCount(lineCount);
-                    firstLinPar.setLineContent("");
-                    mLineParList.add(firstLinPar);
-                } else {
-                    mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
-                }
+                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
                 mLineContentBuilder.delete(0, mLineContentBuilder.length());
                 lineWidth += characterWidth;
                 appendCharToLine(lineCount, "");
@@ -107,10 +98,6 @@ public class SplitEditText extends EditText {
             if (lineWidth > mContentWidth) {
                 lineCount++;
                 lineWidth = 0;
-                /**
-                 * 这里有个计算规则
-                 *
-                 */
                 mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
                 mLineContentBuilder.delete(0, mLineContentBuilder.length());
                 lineWidth += characterWidth;
@@ -135,7 +122,9 @@ public class SplitEditText extends EditText {
     private void addLineParToList(String lineContent, int lineCount, List<LinePar> lineParList) {
 
         if (lineParList.size() == 0) {
+
             createLinParAndAddToList(lineContent, lineCount, lineParList);
+
         } else {
             LinePar linePar = lineParList.get(lineParList.size() - 1);
             if (linePar.isFinishLine())
