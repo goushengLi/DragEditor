@@ -4,7 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.icu.lang.UCharacter;
 import android.os.Build;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.style.TtsSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.EditText;
@@ -80,6 +84,14 @@ public class SplitEditText extends EditText {
             String character = String.valueOf(inputContent.charAt(i));
             float characterWidth = getWidthOfString(character, mPaint);
             lineWidth += characterWidth;
+            if (character.equals("\n")) {
+                lineCount++;
+                lineWidth = 0;
+                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
+                mLineContentBuilder.delete(0, mLineContentBuilder.length());
+                appendCharToLine(lineCount, "");
+            }
+
             if (lineWidth > mContentWidth) {
                 lineCount++;
                 lineWidth = 0;
