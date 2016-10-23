@@ -45,6 +45,7 @@ public class SplitEditText extends EditText {
         }
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.RED);
+//        mPaint.setColor(getPaint().getColor());
         mPaint.setTextSize(getPaint().getTextSize());
         mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
@@ -84,15 +85,14 @@ public class SplitEditText extends EditText {
             String character = String.valueOf(inputContent.charAt(i));
             float characterWidth = getWidthOfString(character, mPaint);
             lineWidth += characterWidth;
-            //因为左侧多了一个空格符号,所以光标向左偏移
-            //可不可以直接不添加这个符号,就是直接换行就行了
             if (character.equals("\n")) {
                 lineCount++;
                 lineWidth = 0;
-//                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
-//                mLineContentBuilder.delete(0, mLineContentBuilder.length());
-//                lineWidth += characterWidth;
-//                appendCharToLine(lineCount, "");
+                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
+                mLineContentBuilder.delete(0, mLineContentBuilder.length());
+                lineWidth += characterWidth;
+                appendCharToLine(lineCount, "");
+                continue;
             }
 
             if (lineWidth > mContentWidth) {
