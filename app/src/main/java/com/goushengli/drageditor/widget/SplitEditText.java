@@ -14,7 +14,9 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.goushengli.drageditor.dao.LinePar;
+import com.goushengli.drageditor.util.DensityUtil;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,30 +32,26 @@ public class SplitEditText extends EditText {
 
     private StringBuilder mLineContentBuilder;
 
-
     private int mPaddingLeft, mPaddingTop, mPaddingBottom, mContentWidth;
 
-
     private List<LinePar> mLineParList;
-    private float mLineSpace, mTextHeight, mSpaceExtra;
+    private float mLineSpace, mTextHeight;
 
     public SplitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
 //        setTextColor(Color.TRANSPARENT);
-
         if (Build.VERSION.SDK_INT >= 16) {
-            mSpaceExtra = getLineSpacingExtra();
+            mLineSpace = getLineSpacingExtra();
+            Log.d("TAG", "mLineSpace = " + mLineSpace);
         }
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.RED);
 //        mPaint.setColor(getPaint().getColor());
-
         mPaint.setTextSize(getPaint().getTextSize());
         mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
 
-        mLineSpace = mSpaceExtra;
-        LINE_SPACE_INCREASE = mSpaceExtra;
+        LINE_SPACE_INCREASE = mLineSpace;
     }
 
     @Override
@@ -61,6 +59,8 @@ public class SplitEditText extends EditText {
         super.onWindowFocusChanged(hasWindowFocus);
         mTextHeight = getTextSize();
         mPaddingLeft = getPaddingLeft();
+        mPaddingTop = getPaddingTop();
+        mPaddingBottom = getPaddingBottom();
         mContentWidth = getWidth() - (mPaddingLeft + getPaddingRight());
     }
 
@@ -85,21 +85,32 @@ public class SplitEditText extends EditText {
             String character = String.valueOf(inputContent.charAt(i));
             float characterWidth = getWidthOfString(character, mPaint);
             lineWidth += characterWidth;
+
             if (character.equals("\n")) {
                 lineCount++;
                 lineWidth = 0;
-                mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
+                if (mLineParList.size() == 0) {
+                    LinePar firstLinPar = new LinePar();
+                    firstLinPar.setFinishLine(true);
+                    firstLinPar.setLineCount(lineCount);
+                    firstLinPar.setLineContent("");
+                    mLineParList.add(firstLinPar);
+                } else {
+                    mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
+                }
                 mLineContentBuilder.delete(0, mLineContentBuilder.length());
                 lineWidth += characterWidth;
-
                 appendCharToLine(lineCount, "");
                 continue;
-
             }
 
             if (lineWidth > mContentWidth) {
                 lineCount++;
                 lineWidth = 0;
+                /**
+                 * 这里有个计算规则
+                 *
+                 */
                 mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
                 mLineContentBuilder.delete(0, mLineContentBuilder.length());
                 lineWidth += characterWidth;
@@ -146,13 +157,13 @@ public class SplitEditText extends EditText {
         float lineSpace = mLineSpace;
         for (int i = 0; i < mLineParList.size(); i++) {
             LinePar child = mLineParList.get(i);
-            canvas.drawText(child.getLineContent(), mPaddingLeft, mTextHeight * (child.getLineCount() + 1) + lineSpace, mPaint);
-            lineSpace += LINE_SPACE_INCREASE * 2;
+            canvas.drawText(child.getLineContent(), mPaddingLeft, (mTextHeight + lineSpace) * (child.getLineCount() + 1), mPaint);
         }
 
     }
 
-    private int getWidthOfString(String str, Paint paint) {
+
+    public int getWidthOfString(String str, Paint paint) {
         if (str != null && !str.equals("") && paint != null) {
             int strLength = str.length();
             int result = 0;

@@ -11,20 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--<EditText-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@null" />-->
-
-    <com.goushengli.drageditor.widget.SplitEditText
+    <Button
+        android:id="@+id/main_click_bt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onClick" />
+
+    <com.goushengli.drageditor.widget.SplitByLineEditText
+        android:id="@+id/mainline_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_click_bt"
         android:background="@null"
-        android:cursorVisible="false"
+        android:cursorVisible="true"
         android:lineSpacingExtra="3dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="18sp" />
+        android:paddingRight="10dp" />
+
+    <!--<com.goushengli.drageditor.widget.SplitEditText-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@null"-->
+    <!--android:cursorVisible="true"-->
+    <!--android:lineSpacingExtra="3dp"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp"-->
+    <!--android:textSize="18sp" />-->
 
     <!--<com.goushengli.drageditor.widget.LimitEditText-->
     <!--android:cursorVisible="false"-->
