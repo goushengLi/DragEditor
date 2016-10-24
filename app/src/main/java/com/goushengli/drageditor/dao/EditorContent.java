@@ -2,6 +2,8 @@ package com.goushengli.drageditor.dao;
 
 import android.graphics.Bitmap;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/10/12 0012.
  */
@@ -13,6 +15,15 @@ public class EditorContent {
     private int type;
     private String textContent;
     private Bitmap imageContent;
+    private List<String> lineContentList;
+
+    public List<String> getLineContentList() {
+        return lineContentList;
+    }
+
+    public void setLineContentList(List<String> lineContentList) {
+        this.lineContentList = lineContentList;
+    }
 
     public int getType() {
         return type;

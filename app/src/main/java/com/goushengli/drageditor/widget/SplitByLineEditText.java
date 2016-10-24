@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 按行切割的EditText
  * Created by Administrator on 2016/10/24 0024.
  */
 

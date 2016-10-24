@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
+    <com.goushengli.drageditor.widget.SplitByLineEditText
         android:id="@+id/editor_item_text_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

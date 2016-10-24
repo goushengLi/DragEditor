@@ -1,22 +1,50 @@
 package com.goushengli.drageditor.holder;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 
 import com.goushengli.drageditor.R;
+import com.goushengli.drageditor.dao.EditorContent;
+import com.goushengli.drageditor.widget.SplitByLineEditText;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/10/12 0012.
  */
 
 public class EditorTextViewHolder extends RecyclerView.ViewHolder {
+    private int mPosition;
 
-    public EditText mETText;
+    private List<EditorContent> mDataList;
 
-    public EditorTextViewHolder(View itemView) {
+    public SplitByLineEditText mETText;
+
+    public EditorTextViewHolder(View itemView, List<EditorContent> dataList) {
         super(itemView);
-        mETText = (EditText) itemView.findViewById(R.id.editor_item_text_et);
+        this.mDataList = dataList;
+        mETText = (SplitByLineEditText) itemView.findViewById(R.id.editor_item_text_et);
+        mDataList.get(mPosition).setLineContentList(mETText.obtainLineContent());
+        mETText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mDataList.get(mPosition).setLineContentList(mETText.obtainLineContent());
+            }
+        });
+    }
+
+    public void setPosition(int position) {
+        this.mPosition = position;
     }
 
 }

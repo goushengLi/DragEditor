@@ -3,6 +3,7 @@ package com.goushengli.drageditor.adapter;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.goushengli.drageditor.helper.ItemTouchHelperAdapter;
 import com.goushengli.drageditor.helper.OnStartDragListener;
 import com.goushengli.drageditor.holder.EditorImageViewHolder;
 import com.goushengli.drageditor.holder.EditorTextViewHolder;
+import com.goushengli.drageditor.holder.MyCustomEditTextListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,13 +51,11 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         for (int i = 0; i < mDataList.size(); i++) {
             EditorContent editorContent = mDataList.get(i);
             if (editorContent.getType() == EditorContent.TEXT_CONTENT) {
-                String textContent = editorContent.getTextContent();
-                //2.找到文本item之后,按'\n'符号进行切割,并将切割出来的子项文本分别按序号放进mTemporaryList中
-                String[] contentSplit = textContent.split("\n");
-                for (int j = 0; j < contentSplit.length; j++) {
+                //2.找到对应的EditText并且按行切割,并将切割出来的子项文本分别按序号放进mTemporaryList中
+                for (int j = 0; j < editorContent.getLineContentList().size(); j++) {
                     EditorContent tempObject = new EditorContent();
                     tempObject.setType(EditorContent.TEXT_CONTENT);
-                    tempObject.setTextContent(contentSplit[j]);
+                    tempObject.setTextContent(editorContent.getLineContentList().get(j));
                     mTemporaryList.add(tempObject);
                 }
             } else {
@@ -66,6 +66,7 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         mDataList.clear();
         mDataList.addAll(mTemporaryList);
         mTemporaryList.clear();
+        Log.d("TAG", "mDataList = " + mDataList);
     }
 
     private enum ITEM_TYPE {
@@ -90,7 +91,7 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         if (viewType == ITEM_TYPE.IMAGE_CONTENT_ITEM.ordinal()) {
             return new EditorImageViewHolder(mLayoutInflater.inflate(R.layout.editor_item_rv_image, null), this);
         } else {
-            return new EditorTextViewHolder(mLayoutInflater.inflate(R.layout.editor_item_rv_text, null));
+            return new EditorTextViewHolder(mLayoutInflater.inflate(R.layout.editor_item_rv_text, null), mDataList);
         }
     }
 
@@ -109,6 +110,7 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
             ((EditorImageViewHolder) holder).mIVImage.setImageBitmap(mDataList.get(position).getImageContent());
         } else {
             ((EditorTextViewHolder) holder).mETText.setText(mDataList.get(position).getTextContent());
+            ((EditorTextViewHolder) holder).setPosition(position);
         }
 
     }

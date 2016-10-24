@@ -53,15 +53,11 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
 
         EditorContent textContent = new EditorContent();
         textContent.setType(EditorContent.TEXT_CONTENT);
-        textContent.setTextContent("我是一个文本,哈哈哈哈哈哈哈哈哈#哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
+        textContent.setTextContent("我是一个文本,哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
 
         EditorContent imageContent = new EditorContent();
         imageContent.setType(EditorContent.IMAGE_CONTENT);
         imageContent.setImageContent(BitmapFactory.decodeResource(getResources(), R.drawable.kobe));
-
-//        EditorContent imageContent2 = new EditorContent();
-//        imageContent2.setType(EditorContent.IMAGE_CONTENT);
-//        imageContent2.setImageContent(BitmapFactory.decodeResource(getResources(), R.drawable.kobe));
 
         dataList.add(imageContent);
         dataList.add(textContent);
