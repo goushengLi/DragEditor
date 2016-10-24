@@ -4,7 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.icu.lang.UCharacter;
 import android.os.Build;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.style.TtsSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.EditText;
@@ -26,30 +30,36 @@ public class SplitEditText extends EditText {
 
     private StringBuilder mLineContentBuilder;
 
-    private int mTextHeight, mPaddingLeft, mContentWidth;
+
+    private int mPaddingLeft, mPaddingTop, mPaddingBottom, mContentWidth;
+
 
     private List<LinePar> mLineParList;
-    private float mLineSpace;
-    private float spaceExtra;
+    private float mLineSpace, mTextHeight, mSpaceExtra;
 
     public SplitEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
 //        setTextColor(Color.TRANSPARENT);
-        spaceExtra = getLineSpacingExtra();
+
+        if (Build.VERSION.SDK_INT >= 16) {
+            mSpaceExtra = getLineSpacingExtra();
+        }
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.RED);
+//        mPaint.setColor(getPaint().getColor());
+
         mPaint.setTextSize(getPaint().getTextSize());
         mLineContentBuilder = new StringBuilder();
         mLineParList = new ArrayList<>();
 
-        mLineSpace = spaceExtra;
-        LINE_SPACE_INCREASE = spaceExtra;
+        mLineSpace = mSpaceExtra;
+        LINE_SPACE_INCREASE = mSpaceExtra;
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
-        mTextHeight = (int) getTextSize();
+        mTextHeight = getTextSize();
         mPaddingLeft = getPaddingLeft();
         mContentWidth = getWidth() - (mPaddingLeft + getPaddingRight());
     }
@@ -81,6 +91,10 @@ public class SplitEditText extends EditText {
                 mLineParList.get(mLineParList.size() - 1).setFinishLine(true);
                 mLineContentBuilder.delete(0, mLineContentBuilder.length());
                 lineWidth += characterWidth;
+
+                appendCharToLine(lineCount, "");
+                continue;
+
             }
 
             if (lineWidth > mContentWidth) {
