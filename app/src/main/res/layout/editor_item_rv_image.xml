@@ -10,7 +10,7 @@
         <RelativeLayout
             android:id="@+id/editor_item_content_rl"
             android:layout_width="285dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:background="@android:color/white">

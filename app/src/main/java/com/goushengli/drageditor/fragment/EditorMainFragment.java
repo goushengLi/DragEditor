@@ -32,6 +32,7 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
     private ItemTouchHelper mItemTouchHelper;
 
     private RecyclerView mRecycleView;
+    private EditorContentRecycleAdapter recycleAdapter;
 
     public static EditorMainFragment newInstance() {
         EditorMainFragment editorMainFragment = new EditorMainFragment();
@@ -53,7 +54,13 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
 
         EditorContent textContent = new EditorContent();
         textContent.setType(EditorContent.TEXT_CONTENT);
-        textContent.setTextContent("我是一个文本,哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
+        textContent.setTextContent("");
+//        textContent.setTextContent("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
+//                + "啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊阿"
+//                + "哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦"
+//                + "口口口口口口口口口口口口口口口口口"
+//                + "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦");
+
 
         EditorContent imageContent = new EditorContent();
         imageContent.setType(EditorContent.IMAGE_CONTENT);
@@ -62,7 +69,7 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
         dataList.add(imageContent);
         dataList.add(textContent);
 
-        EditorContentRecycleAdapter recycleAdapter = new EditorContentRecycleAdapter(getContext(), dataList, this);
+        recycleAdapter = new EditorContentRecycleAdapter(getContext(), dataList, this);
         mRecycleView.setAdapter(recycleAdapter);
 
         ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(recycleAdapter);
@@ -72,6 +79,8 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        recycleAdapter.notifyDataSetChanged();
         mItemTouchHelper.startDrag(viewHolder);
+
     }
 }

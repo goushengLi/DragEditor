@@ -62,11 +62,11 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
                 mTemporaryList.add(editorContent);
             }
         }
+
         //3.根据获得到的mTemporaryList来更新RecycleView
         mDataList.clear();
         mDataList.addAll(mTemporaryList);
         mTemporaryList.clear();
-        Log.d("TAG", "mDataList = " + mDataList);
     }
 
     private enum ITEM_TYPE {
@@ -76,7 +76,6 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-
         switch (mDataList.get(position).getType()) {
             case EditorContent.TEXT_CONTENT:
                 return ITEM_TYPE.TEXT_CONTENT_ITEM.ordinal();

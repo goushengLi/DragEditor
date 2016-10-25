@@ -3,6 +3,7 @@ package com.goushengli.drageditor.holder;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
 import com.goushengli.drageditor.R;
@@ -18,7 +19,7 @@ import java.util.List;
 public class EditorTextViewHolder extends RecyclerView.ViewHolder {
     private int mPosition;
 
-    private List<EditorContent> mDataList;
+    public List<EditorContent> mDataList;
 
     public SplitByLineEditText mETText;
 
@@ -26,7 +27,6 @@ public class EditorTextViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.mDataList = dataList;
         mETText = (SplitByLineEditText) itemView.findViewById(R.id.editor_item_text_et);
-        mDataList.get(mPosition).setLineContentList(mETText.obtainLineContent());
         mETText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -45,6 +45,17 @@ public class EditorTextViewHolder extends RecyclerView.ViewHolder {
 
     public void setPosition(int position) {
         this.mPosition = position;
+        obtainLineContent();
     }
+
+    public void obtainLineContent() {
+        mETText.post(new Runnable() {
+            @Override
+            public void run() {
+                mDataList.get(mPosition).setLineContentList(mETText.obtainLineContent());
+            }
+        });
+    }
+
 
 }
