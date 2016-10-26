@@ -44,12 +44,12 @@
 
         <ImageView
             android:id="@+id/editor_item_handle_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignRight="@+id/editor_item_content_rl"
             android:layout_alignTop="@+id/editor_item_content_rl"
-            android:layout_marginRight="-20dp"
-            android:padding="5dp"
+            android:layout_marginRight="-25dp"
+            android:padding="15dp"
             android:src="@drawable/icon_handle" />
     </RelativeLayout>
 </RelativeLayout>

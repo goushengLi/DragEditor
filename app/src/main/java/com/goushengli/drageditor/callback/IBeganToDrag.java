@@ -5,5 +5,5 @@ package com.goushengli.drageditor.callback;
  */
 
 public interface IBeganToDrag {
-    void onImageItemDrag();
+    void onImageItemDrag(int position);
 }

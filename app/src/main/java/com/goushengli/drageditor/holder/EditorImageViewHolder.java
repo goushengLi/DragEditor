@@ -29,6 +29,8 @@ public class EditorImageViewHolder extends RecyclerView.ViewHolder implements It
     public EditText mETContent;
 
 
+    private int mPosition;
+
     public EditorImageViewHolder(View itemView, IBeganToDrag beganToDrag) {
         super(itemView);
         mBeganToDrag = beganToDrag;
@@ -38,12 +40,16 @@ public class EditorImageViewHolder extends RecyclerView.ViewHolder implements It
         mETContent = (EditText) itemView.findViewById(R.id.editor_item_image_content_et);
     }
 
+    public void setPosition(int position) {
+        this.mPosition = position;
+    }
+
     @Override
     public void onItemSelected() {
         //1.准备开始拖动,将图片item压缩至
         compressImageItem();
         //2.回调Adapter,对数据进行遍历整合
-        mBeganToDrag.onImageItemDrag();
+        mBeganToDrag.onImageItemDrag(mPosition);
     }
 
     @Override
