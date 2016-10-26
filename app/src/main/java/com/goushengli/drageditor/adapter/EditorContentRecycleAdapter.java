@@ -68,6 +68,10 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         mDataList.clear();
         mDataList.addAll(mTemporaryList);
         mTemporaryList.clear();
+        /**
+         * 只有放在第一位的时候没有错位,这个是因为分割之后,数据List发生了变化,所以item的index也就变化了,而image
+         * 放在第一位,那么它的index是不会变化的,那么就不存在错位的情况了
+         */
         try {
             notifyItemChanged(position - 3);
             notifyItemChanged(position - 2);
