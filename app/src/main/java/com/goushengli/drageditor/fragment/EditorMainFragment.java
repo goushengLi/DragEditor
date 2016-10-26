@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,9 +45,17 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
         View view = inflater.inflate(R.layout.editor_fm_content, null);
         IMAGE_ITEM_SMALL_SIZE = DensityUtil.dip2px(getContext(), 45);
         mRecycleView = (RecyclerView) view.findViewById(R.id.editor_fm_content_recycleview);
-        mRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public void onLayoutCompleted(RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+                Log.d("TAG", "onLayoutCompleted");
+            }
+        };
+        mRecycleView.setLayoutManager(linearLayoutManager);
         return view;
     }
+
 
     @Override
     public void initData() {

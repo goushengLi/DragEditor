@@ -45,6 +45,7 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         mDragStartListener = dragStartListener;
     }
 
+
     @Override
     public void onImageItemDrag(int position) {
         //1.遍历mDataList,查找出属于文本内容的item
@@ -67,9 +68,6 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         mDataList.clear();
         mDataList.addAll(mTemporaryList);
         mTemporaryList.clear();
-        /**
-         * 需要在开启拖拽之前把数据给切割好
-         */
         try {
             notifyItemChanged(position - 3);
             notifyItemChanged(position - 2);
