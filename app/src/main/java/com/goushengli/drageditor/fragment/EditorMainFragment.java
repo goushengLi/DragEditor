@@ -49,7 +49,6 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
             @Override
             public void onLayoutCompleted(RecyclerView.State state) {
                 super.onLayoutCompleted(state);
-                Log.d("TAG", "onLayoutCompleted");
             }
         };
         mRecycleView.setLayoutManager(linearLayoutManager);
@@ -75,9 +74,8 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
         imageContent.setType(EditorContent.IMAGE_CONTENT);
         imageContent.setImageContent(BitmapFactory.decodeResource(getResources(), R.drawable.kobe));
 
-        dataList.add(imageContent);
         dataList.add(textContent);
-//        dataList.add(textContent);
+        dataList.add(imageContent);
 
         recycleAdapter = new EditorContentRecycleAdapter(getContext(), dataList, this);
         mRecycleView.setAdapter(recycleAdapter);

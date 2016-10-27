@@ -16,7 +16,6 @@ import com.goushengli.drageditor.helper.ItemTouchHelperAdapter;
 import com.goushengli.drageditor.helper.OnStartDragListener;
 import com.goushengli.drageditor.holder.EditorImageViewHolder;
 import com.goushengli.drageditor.holder.EditorTextViewHolder;
-import com.goushengli.drageditor.holder.MyCustomEditTextListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,10 +68,14 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         mDataList.addAll(mTemporaryList);
         mTemporaryList.clear();
         /**
-         * 只有放在第一位的时候没有错位,这个是因为分割之后,数据List发生了变化,所以item的index也就变化了,而image
-         * 放在第一位,那么它的index是不会变化的,那么就不存在错位的情况了
+         * 只有放在第一位的时候没有错位,这个是因为分割之后,数据List发生了变化,所以item的index
+         * 也就变化了,而image放在第一位,那么它的index是不会变化的,那么就不存在错位的情况了
          */
         try {
+            /**
+             * 这里只需要刷新屏幕里面看得到的item,因为在屏幕上显示的item无法根据mDataList的变化而动态
+             * 适配,所以需要我们手动来刷新
+             */
             notifyItemChanged(position - 3);
             notifyItemChanged(position - 2);
             notifyItemChanged(position - 1);
@@ -82,6 +85,47 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onImageItemRelease() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < mDataList.size(); i++) {
+            EditorContent editorContent = mDataList.get(i);
+            if (editorContent.getType() == EditorContent.TEXT_CONTENT) {
+                stringBuilder.append(editorContent.getTextContent());
+
+
+                if (i == 0) {
+                    EditorContent tempObject = new EditorContent();
+                    tempObject.setType(EditorContent.TEXT_CONTENT);
+                    tempObject.setTextContent(stringBuilder.toString());
+                    mTemporaryList.add(tempObject);
+                } else {
+                    EditorContent child = mTemporaryList.get(mTemporaryList.size() - 1);
+
+                    if (child.getType() == EditorContent.IMAGE_CONTENT) {
+                        EditorContent tempObject = new EditorContent();
+                        tempObject.setType(EditorContent.TEXT_CONTENT);
+                        tempObject.setTextContent(stringBuilder.toString());
+                        mTemporaryList.add(tempObject);
+                    } else {
+                        child.setTextContent(stringBuilder.toString());
+                    }
+                }
+
+            } else {
+                stringBuilder.delete(0, stringBuilder.length());
+                mTemporaryList.add(editorContent);
+            }
+        }
+
+        mDataList.clear();
+        mDataList.addAll(mTemporaryList);
+        mTemporaryList.clear();
+
+        notifyDataSetChanged();
+
     }
 
     private enum ITEM_TYPE {
@@ -111,6 +155,7 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        Log.d("TAG", "onBindViewHolder");
         if (holder instanceof EditorImageViewHolder) {
             ((EditorImageViewHolder) holder).mIVHandle.setOnTouchListener(new View.OnTouchListener() {
                 @Override

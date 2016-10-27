@@ -44,11 +44,13 @@ public class EditorTextViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setPosition(int position) {
+        Log.d("TAG", "position = " + position);
         this.mPosition = position;
         obtainLineContent();
     }
 
     public void obtainLineContent() {
+
         mETText.post(new Runnable() {
             @Override
             public void run() {
