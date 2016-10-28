@@ -45,29 +45,20 @@ public class EditorImageViewHolder extends RecyclerView.ViewHolder implements It
         this.mPosition = position;
     }
 
-    int count = 0;
-
     @Override
     public void onItemSelected() {
-        count++;
         //1.准备开始拖动,将图片item压缩至
         compressImageItem();
         //2.回调Adapter,对数据进行遍历整合
-        mBeganToDrag.onImageItemDrag(mPosition);
+//        mBeganToDrag.onImageItemDrag(mPosition);
     }
 
-    /**
-     * 使用一个计数器,就行了
-     */
     @Override
     public void onItemRelease() {
         //1.将图片item还原为原来的高度
         decompressionImageItem();
         //2.判断各个相邻的item,如果都是EditText,那么就将其整合起来,合并为一个
-        if (count == 2) {
-            count = 0;
-            mBeganToDrag.onImageItemRelease();
-        }
+//        mBeganToDrag.onImageItemRelease();
     }
 
     /**

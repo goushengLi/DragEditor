@@ -62,13 +62,11 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
 
         EditorContent textContent = new EditorContent();
         textContent.setType(EditorContent.TEXT_CONTENT);
-        textContent.setTextContent("");
         textContent.setTextContent("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
                 + "啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊阿"
                 + "哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦"
                 + "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦"
                 + "口口口口口口口口口口口口口口口口口");
-
 
         EditorContent imageContent = new EditorContent();
         imageContent.setType(EditorContent.IMAGE_CONTENT);
@@ -88,6 +86,5 @@ public class EditorMainFragment extends BaseFragment implements OnStartDragListe
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
-
     }
 }

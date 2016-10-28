@@ -1,9 +1,11 @@
 package com.goushengli.drageditor.adapter;
 
 import android.content.Context;
+import android.support.annotation.BoolRes;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,6 +49,10 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onImageItemDrag(int position) {
+        splitAndResetData(position);
+    }
+
+    private void splitAndResetData(int position) {
         //1.遍历mDataList,查找出属于文本内容的item
         for (int i = 0; i < mDataList.size(); i++) {
             EditorContent editorContent = mDataList.get(i);
@@ -73,8 +79,8 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
          */
         try {
             /**
-             * 这里只需要刷新屏幕里面看得到的item,因为在屏幕上显示的item无法根据mDataList的变化而动态
-             * 适配,所以需要我们手动来刷新
+             * 这里只需要刷新屏幕里面看得到的item,因为在屏幕上显示的item
+             * 无法根据mDataList的变化而动态适配,所以需要我们手动来刷新
              */
             notifyItemChanged(position - 3);
             notifyItemChanged(position - 2);
@@ -82,6 +88,7 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
             notifyItemChanged(position + 1);
             notifyItemChanged(position + 2);
             notifyItemChanged(position + 3);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,8 +101,6 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
             EditorContent editorContent = mDataList.get(i);
             if (editorContent.getType() == EditorContent.TEXT_CONTENT) {
                 stringBuilder.append(editorContent.getTextContent());
-
-
                 if (i == 0) {
                     EditorContent tempObject = new EditorContent();
                     tempObject.setType(EditorContent.TEXT_CONTENT);
@@ -155,14 +160,31 @@ public class EditorContentRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        Log.d("TAG", "onBindViewHolder");
         if (holder instanceof EditorImageViewHolder) {
+            /**
+             * 我们在touch的时候拆解数据,重新布局,然后在long press中启动拖拽
+             */
             ((EditorImageViewHolder) holder).mIVHandle.setOnTouchListener(new View.OnTouchListener() {
+
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                        mDragStartListener.onStartDrag(holder);
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            Log.d("TAG", "ACTION_DOWN");
+                            splitAndResetData(position);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            Log.d("TAG", "ACTION_UP");
+                            break;
                     }
+                    return false;
+                }
+            });
+
+            ((EditorImageViewHolder) holder).mIVHandle.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mDragStartListener.onStartDrag(holder);
                     return false;
                 }
             });
